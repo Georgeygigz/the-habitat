@@ -9,24 +9,18 @@ class Config():
 
 class DevelopmentConfig(Config):
     """Enable our debug mode to True in development in order to auto restart our server on code changes"""
-
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.getenv("DOCKER_DATABASE_URL")
 
-    
 class TestingConfig(Config):
     """Testing app configurations"""
     TESTING = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'postgres://test-user@localhost:5432/test-db'
-    # SQLALCHEMY_DATABASE_URI = os.getenv("TEST_DATABASE_URL")
-
+    SQLALCHEMY_DATABASE_URI = os.getenv("TEST_DATABASE_URL")
     
 class ReleaseConfig(Config):
     """Releasing app configurations"""
     DEBUG = False
     TESTING = False
-
 
 app_configuration={
     'development': DevelopmentConfig,

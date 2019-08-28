@@ -6,9 +6,6 @@ jobs:
     # executor
     docker:
       - image: circleci/python:3.6.1 # primary container for the build job
-        environment:
-          DATA_BASE_URI: 'postgres://test-user@localhost:5432/test-db'
-
       # - image: circleci/postgres:9.4
       - image: circleci/postgres:10.6-alpine-ram # an example of how to specify a service container
         environment:
@@ -40,7 +37,7 @@ jobs:
             pip install -r requirements.txt
  
       # use catch to save time between runs
-      # svae to cache certain files
+      # save to cache certain files
       - save_cache:
           paths:
             - ./venv
@@ -48,6 +45,8 @@ jobs:
 
       - run:
           name: run tests
+          environment:
+            TEST_DATABASE_URL: postgres://test-user@localhost:5432/test-db
           command: |
             . venv/bin/activate
             nosetests --with-coverage --cover-package=app && coverage report
@@ -59,4 +58,3 @@ jobs:
       - store_artifacts:
           path: test-reports
           destination: test-reports
-          

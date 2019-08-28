@@ -23,4 +23,4 @@ echo "<<<<<<<<<<<<<<<<<<<< START API >>>>>>>>>>>>>>>>>>>>>>>>"
 sleep 3
 
 # Start the API
-python run.py 0.0.0.0:8000
+python run.py

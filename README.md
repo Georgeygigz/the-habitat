@@ -1,7 +1,7 @@
 # The Habitat
 This is a plat form that helps tenants find the house to rent in a more efficient way
 
-[![CircleCI](https://circleci.com/gh/Georgeygigz/the-habitat/tree/ft-setup-project-168102849.svg?style=svg)](https://circleci.com/gh/Georgeygigz/the-habitat/tree/ft-setup-project-168102849) [![Coverage Status](https://coveralls.io/repos/github/Georgeygigz/the-habitat/badge.svg?branch=ft-setup-project-168102849)](https://coveralls.io/github/Georgeygigz/the-habitat?branch=ft-setup-project-168102849) [![Maintainability](https://api.codeclimate.com/v1/badges/b5d06a15a2f52386c419/maintainability)](https://codeclimate.com/github/Georgeygigz/the-habitat/maintainability)
+[![CircleCI](https://circleci.com/gh/Georgeygigz/the-habitat/tree/develop.svg?style=svg)](https://circleci.com/gh/Georgeygigz/the-habitat/tree/develop) [![Coverage Status](https://coveralls.io/repos/github/Georgeygigz/the-habitat/badge.svg?branch=ft-setup-project-168102849)](https://coveralls.io/github/Georgeygigz/the-habitat?branch=ft-setup-project-168102849) [![Maintainability](https://api.codeclimate.com/v1/badges/b5d06a15a2f52386c419/maintainability)](https://codeclimate.com/github/Georgeygigz/the-habitat/maintainability)
 
 
 # This project creates a set of API Endpoints listed below

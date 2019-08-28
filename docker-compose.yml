@@ -17,6 +17,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    environment:
+      DATA_BASE_URI: "postgresql://postgres:postgres@db:5432/postgres"
     ports:
       - "8000:8000"
     volumes:
