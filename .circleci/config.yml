@@ -1,33 +1,24 @@
 # Python CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-python/ for more details
-#
+
 version: 2
 jobs:
   build:
+    # executor
     docker:
-      # specify the version you desire here
-      # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
-      - image: circleci/python:3.6.1
-        environment:
-          FLASK_ENV: testing
-          PGUSER: circleci
-          DATA_BASE_URI: 'postgres://test-user@localhost:5432/test-db'
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
+      - image: circleci/python:3.6.1 # primary container for the build job
       # - image: circleci/postgres:9.4
-
       - image: circleci/postgres:10.6-alpine-ram # an example of how to specify a service container
         environment:
           POSTGRES_USER: test-user
           POSTGRES_DB: test-db
           POSTGRES_PASSWORD: ""
-
+    
+    # used to specify where a job's steps run
     working_directory: ~/repo
-
+    
+    # to run specific commands
     steps:
+      # checkout is used to check out source code
       - checkout
 
       # Download and cache dependencies
@@ -44,23 +35,25 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
-
+ 
+      # use catch to save time between runs
+      # save to cache certain files
       - save_cache:
           paths:
             - ./venv
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
-      # run tests!
-      # this example uses Django's built-in test-runner
-      # other common Python testing frameworks include pytest and nose
-      # https://pytest.org
-      # https://nose.readthedocs.io
       - run:
           name: run tests
+          environment:
+            TEST_DATABASE_URL: postgres://test-user@localhost:5432/test-db
           command: |
             . venv/bin/activate
             nosetests --with-coverage --cover-package=app && coverage report
             coveralls
+      
+      - store_test_results:
+          path: test-results
 
       - store_artifacts:
           path: test-reports
