@@ -11,7 +11,7 @@ from app.api.models.auth_modles import User
 """Creating a new testing  class."""
 class BaseTest(unittest.TestCase):
     def setUp(self):
-        self.app = create_app('testing')
+        self.app = create_app(AppConfig)
         self.client = self.app.test_client
         self.app.testing = True
         

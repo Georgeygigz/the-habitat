@@ -1,4 +1,3 @@
-# app/api/v1/views/auth_views.py
 """This is where all authentication Endpoints will be captured."""
 import re
 from flask_jwt_extended import (create_access_token, jwt_required,get_raw_jwt)
@@ -6,21 +5,29 @@ from flask import request, jsonify, make_response
 import datetime
 from functools import wraps
 from passlib.hash import sha256_crypt
-
 from flask_restful import Resource, reqparse
+from flask_dance.contrib.github import github
+from flask_dance.contrib.google import google
+
+from flask import Flask, redirect, url_for, render_template, flash
+
 
 from app.api.models.auth_modles import User;
 from app.api.schemas.auth_shema import UserSchema
-
-# import class products
-# from app.api.v2.models.store_model import Users
+from app.api.utils.validators import check_user_if_exist,check_valid_email,check_valid_password
 from app.api.utils.authorization import admin_required
 blacklist = set()
+
+from instance.config import AppConfig
+
 
 class CreateAccount(Resource):
     """Create a new account."""
     @jwt_required
     @admin_required
+    @check_user_if_exist
+    @check_valid_email
+    @check_valid_password
     def post(self):
         """Create an account for new user."""
         users = User.query.all()
@@ -31,19 +38,6 @@ class CreateAccount(Resource):
         password = data["password"]
         user_type = data["user_type"]
         current_user = [user for user in users if user.email == email]
-        if current_user:
-            return make_response(jsonify({"message": "{} Already Exist".format(current_user[0].email)}), 409)#Bad request
-
-
-        if not re.match(
-            r'^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$',
-                request.json['email']):
-            return make_response(jsonify({"message": "invalid Email"}), 400)#Bad request
-
-        if not re.match(
-            '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$])',
-                request.json['password']):
-            return make_response(jsonify({"message": "invalid password"}), 400)#Bad request
 
         new_user_detail = {"user_id": len(users)+1,
                            "username": username,
@@ -51,18 +45,12 @@ class CreateAccount(Resource):
                            "password": sha256_crypt.hash(password),
                            "user_type": user_type}
         schema  = UserSchema()
-        # import pdb; pdb.set_trace()
 
         data1 = schema.load_object_into_schema(new_user_detail)
         new_data = User(**data1)
         new_data.save()
-        # import pdb; pdb.set_trace()
-
         return make_response(
                 jsonify({"message": "Account created successfuly"}), 201)#created
-
-        return make_response(jsonify(
-            {"message": " {} Aready Exist".format(request.json['email'])}), 409)  # conflict
 
 
 class Login(Resource):
@@ -89,6 +77,13 @@ class Login(Resource):
 
         return result, 200 #ok
 
+class SocialLogin(Resource):
+    def get(self):
+        if not google.authorized:
+            return redirect(url_for("google.login"))
+        resp = google.get("/oauth2/v1/userinfo")
+        assert resp.ok, resp.text
+        return "{email}".format(email=resp.json())
 
 class UpdateUserRole(Resource):
     @jwt_required
