@@ -1,0 +1,9 @@
+[run]
+include = */apps/*
+omit =
+    *migrations*
+    *__init__*
+    *models*
+    *categories_schema*
+    *tests*
+    *store_database*
