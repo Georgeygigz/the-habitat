@@ -5,7 +5,7 @@ jobs:
   build:
     # executor
     docker:
-      - image: circleci/python:3.6.1 # primary container for the build job
+      - image: circleci/python:3.7.4 # primary container for the build job
       # - image: circleci/postgres:9.4
       - image: circleci/postgres:10.6-alpine-ram # an example of how to specify a service container
         environment:
@@ -24,7 +24,7 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "requirements.txt" }}
+            - v1-dependencies-{{ checksum "Pipfile" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
@@ -32,25 +32,24 @@ jobs:
         run:
           name: install dependencies
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
+            sudo pip install pipenv
+            pipenv install
  
       # use catch to save time between runs
       # save to cache certain files
       - save_cache:
           paths:
             - ./venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
+          key: v1-dependencies-{{ checksum "Pipfile" }}
 
       - run:
           name: run tests
           environment:
             TEST_DATABASE_URL: postgres://test-user@localhost:5432/test-db
           command: |
-            . venv/bin/activate
-            nosetests --with-coverage --cover-package=app && coverage report
-            coveralls
+            pipenv run nosetests --with-coverage --cover-package=app
+            pipenv run coverage report 
+            pipenv run coveralls
       
       - store_test_results:
           path: test-results

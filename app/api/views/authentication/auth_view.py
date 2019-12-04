@@ -19,8 +19,7 @@ blacklist = set()
 
 class CreateAccount(Resource):
     """Create a new account."""
-    @jwt_required
-    @admin_required
+ 
     def post(self):
         """Create an account for new user."""
         users = User.query.all()
@@ -51,12 +50,11 @@ class CreateAccount(Resource):
                            "password": sha256_crypt.hash(password),
                            "user_type": user_type}
         schema  = UserSchema()
-        # import pdb; pdb.set_trace()
 
         data1 = schema.load_object_into_schema(new_user_detail)
         new_data = User(**data1)
         new_data.save()
-        # import pdb; pdb.set_trace()
+    
 
         return make_response(
                 jsonify({"message": "Account created successfuly"}), 201)#created

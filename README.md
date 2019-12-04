@@ -23,10 +23,12 @@ This is a plat form that helps tenants find the house to rent in a more efficien
  2. Open the terminal and navigate to the folder
  3. `git clone` this  <code>[repo](https://github.com/Georgeygigz/store-manager-api/)</code>
  4.  run `pip install -r requirements.txt` to install the dependencies
- 5.  Create a virtal environment
- 6.  Export the environmental variable
- 7.  Then on your terminal write ```flask run``` to start the server
- 8. Then on [postman](https://www.getpostman.com/), navigate to this url `api/v2/auth/login`
+ 5.  run `python manage.py db upgrade` to upgrade the database
+ 6.  run `python manage.py db migrate` to make migration
+ 7.  Create a virtual environment
+ 8.  Export the environmental variable
+ 9.  Then on your terminal write ```flask run``` to start the server
+ 10. Then on [postman](https://www.getpostman.com/), navigate to this url `api/v2/auth/login`
 
 
 # heroku application Link
