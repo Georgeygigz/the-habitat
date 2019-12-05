@@ -1,7 +1,7 @@
 #run.py
 
 import os
-from app import create_app
+from main import create_app
 from instance.config import AppConfig
 app = create_app(AppConfig)
 

@@ -1,7 +1,7 @@
 from marshmallow import fields, post_load, pre_load, Schema
-from app.api.utils.validation_error import ValidationError
+from api.utils.validation_error import ValidationError
 
-from app.api.models.auth_modles import User
+from api.models.auth_modles import User
 
 class UserSchema(Schema):
     user_id = fields.Int()
