@@ -7,19 +7,26 @@ import datetime
 from functools import wraps
 from passlib.hash import sha256_crypt
 
-from flask_restful import Resource, reqparse
+from flask_restplus import Resource, reqparse, fields
 
-from app.api.models.auth_modles import User;
-from app.api.schemas.auth_shema import UserSchema
+from api.models.auth_modles import User;
+from api.schemas.auth_shema import UserSchema
 
 # import class products
-# from app.api.v2.models.store_model import Users
-from app.api.utils.authorization import admin_required
+# from api.v1.models.store_model import Users
+from api.utils.authorization import admin_required
+from utilities.swagger.constants import REGISTER_NEW_USER_PARAMS
+from utilities.swagger.collections.authentication import register_namespace
+from utilities.swagger.swagger_models.authentication import register_model
+
 blacklist = set()
 
+@register_namespace.route('/register')
 class CreateAccount(Resource):
     """Create a new account."""
- 
+    @jwt_required
+    @admin_required
+    @register_namespace.expect(register_model)
     def post(self):
         """Create an account for new user."""
         users = User.query.all()
@@ -62,11 +69,12 @@ class CreateAccount(Resource):
         return make_response(jsonify(
             {"message": " {} Aready Exist".format(request.json['email'])}), 409)  # conflict
 
-
+@register_namespace.route('/login')
 class Login(Resource):
     """Login Endpoint."""
 
     def post(self):
+        """Login Endpoint."""
         data = request.get_json(force=True)
         email = data['email']
         get_password = data['password']
@@ -87,7 +95,7 @@ class Login(Resource):
 
         return result, 200 #ok
 
-
+@register_namespace.route('/role/<int:user_id>')
 class UpdateUserRole(Resource):
     @jwt_required
     @admin_required
@@ -104,10 +112,11 @@ class UpdateUserRole(Resource):
         user.update_user(user_id, role)
         return make_response(jsonify(
             {'Message': "{} Updated Successfuly".format(current_user.username)}), 200) #ok
-
+@register_namespace.route('/logout')
 class Logout(Resource):
     @jwt_required
     def delete(self):
+        """Logout Endpoint."""
         jti = get_raw_jwt()['jti']
         blacklist.add(jti)
         return make_response(jsonify({"message": "Successfully logged out"}), 200)#ok

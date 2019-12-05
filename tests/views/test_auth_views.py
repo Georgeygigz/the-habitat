@@ -1,8 +1,8 @@
 # app/tests/v1/test_storeviews.py
 import unittest
 import json
-from app import create_app
-from app.tests.base_test import BaseTest
+from main import create_app
+from tests.base_test import BaseTest
 
 class TestStoreViews(BaseTest):
     def test_create_account(self):
