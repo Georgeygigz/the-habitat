@@ -3,21 +3,22 @@
 """This is where all API Endpoints will be captured."""
 from flask import request, jsonify, make_response
 from datetime import date
-from flask_restful import Resource
+from flask_restplus import Resource
 from flask_jwt_extended import (jwt_required, get_jwt_identity)
 
 # local imports
-from app.api.utils.authorization import (
+from api.utils.authorization import (
     admin_required, store_attendant_required)
 
-from app.api.models.products_model import Products
-from app.api.schemas.products_schema import ProductsSchema
+from api.models.products_model import Products
+from api.schemas.products_schema import ProductsSchema
+from utilities.swagger.collections.rentals import rental_namespace
 
 def get_products():
     products = Products.query.all()
     return products
 
-
+@rental_namespace.route('')
 class ViewProducts(Resource):
     @jwt_required
     def get(self):
@@ -69,7 +70,7 @@ class ViewProducts(Resource):
         new_pro.save()
         return make_response(jsonify({"New Product": new_product}), 201) #Created
 
-
+@rental_namespace.route('/<int:product_id>')
 class ViewSingleProduct(Resource):
     @jwt_required
     def get(self, product_id):

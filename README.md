@@ -7,9 +7,9 @@ This is a plat form that helps tenants find the house to rent in a more efficien
 # This project creates a set of API Endpoints listed below
 | EndPoints       | Functionality  | HTTP Method  |
 | ------------- |:-------------:| -----:|
-| api/v2/auth/register|Create user account|POST|
-| api/v2/auth/login|User login |POST|
-| api/v2/auth/role|Update user role login |PUT|
+| api/v1/auth/register|Create user account|POST|
+| api/v1/auth/login|User login |POST|
+| api/v1/auth/role|Update user role login |PUT|
 
 ## TOOLS TO BE USED IN THE CHALLENGE
 1. Server-Side Framework:[Flask Python Framework](http://flask.pocoo.org/)
@@ -28,7 +28,7 @@ This is a plat form that helps tenants find the house to rent in a more efficien
  7.  Create a virtual environment
  8.  Export the environmental variable
  9.  Then on your terminal write ```flask run``` to start the server
- 10. Then on [postman](https://www.getpostman.com/), navigate to this url `api/v2/auth/login`
+ 10. Then on [postman](https://www.getpostman.com/), navigate to this url `api/v1/auth/login`
 
 
 # heroku application Link
@@ -39,4 +39,4 @@ This is a plat form that helps tenants find the house to rent in a more efficien
 `Georgey Gigz`
 
 # Realease 
- Version one `(v2)`
+ Version one `(v1)`

@@ -47,7 +47,7 @@ jobs:
           environment:
             TEST_DATABASE_URL: postgres://test-user@localhost:5432/test-db
           command: |
-            pipenv run nosetests --with-coverage --cover-package=app
+            pipenv run nosetests --with-coverage --cover-package=api
             pipenv run coverage report 
             pipenv run coveralls
       

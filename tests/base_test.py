@@ -1,11 +1,11 @@
-# app/tests/v2/base_test.py
+# app/tests/v1/base_test.py
 import unittest
 import json
 import jwt
-from app import create_app
+from main import create_app
 from instance.config import AppConfig
-from app.api.models.databases import db
-from app.api.models.auth_modles import User
+from api.models.databases import db
+from api.models.auth_modles import User
 
 
 """Creating a new testing  class."""
@@ -114,13 +114,13 @@ class BaseTest(unittest.TestCase):
         }
     def user_login(self):
         
-        response = self.client().post('/api/v2/auth/login',
+        response = self.client().post('/api/v1/auth/login',
                                  data=json.dumps(self.user1))
         result = json.loads(response.data.decode('utf-8'))
         return result
 
     def admin_login(self):
-        response = self.client().post('/api/v2/auth/login',
+        response = self.client().post('/api/v1/auth/login',
                                  data=json.dumps({"email": "hellem@gmail.com","password": "G@_gigz-2416"}))
         
         result = json.loads(response.data.decode('utf-8'))
@@ -140,7 +140,7 @@ class BaseTest(unittest.TestCase):
     def add_new_product(self):
         access_token=self.get_admin_token()
         response = self.client().post(
-            '/api/v2/products',
+            '/api/v1/products',
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token},
             data=json.dumps(self.products)
         
@@ -151,7 +151,7 @@ class BaseTest(unittest.TestCase):
         self.add_new_product()
         access_token=self.get_admin_token()
         response = self.client().put(
-            '/api/v2/products',
+            '/api/v1/products',
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token},
             data=json.dumps(self.products)
         
@@ -162,7 +162,7 @@ class BaseTest(unittest.TestCase):
         self.add_new_product()
         access_token=self.get_user_token()
         response = self.client().get(
-            '/api/v2/products',
+            '/api/v1/products',
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token}
         )
         return response
@@ -170,7 +170,7 @@ class BaseTest(unittest.TestCase):
     def get_unexisting_products(self):
         access_token=self.get_user_token()
         response = self.client().get(
-            '/api/v2/products',
+            '/api/v1/products',
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token}
         )
         return response
@@ -179,7 +179,7 @@ class BaseTest(unittest.TestCase):
         self.add_new_product()
         access_token=self.get_admin_token()
         response = self.client().delete(
-            '/api/v2/products/1',
+            '/api/v1/products/1',
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token}
         )
         return response
@@ -187,7 +187,7 @@ class BaseTest(unittest.TestCase):
     def delete_unexisting_products(self):
         access_token=self.get_admin_token()
         response = self.client().delete(
-            '/api/v2/products/1',
+            '/api/v1/products/1',
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token}
         )
         return response
@@ -196,7 +196,7 @@ class BaseTest(unittest.TestCase):
         self.add_new_product()
         access_token=self.get_admin_token()
         response = self.client().put(
-            '/api/v2/products/1',
+            '/api/v1/products/1',
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token},
             data=json.dumps(self.products))
         return response    
@@ -204,7 +204,7 @@ class BaseTest(unittest.TestCase):
     def check_invalid_data_type(self):
         access_token=self.get_admin_token()
         response = self.client().post(
-            '/api/v2/products',
+            '/api/v1/products',
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token},
             data=json.dumps(self.invalid_data_types_products)
         
@@ -215,7 +215,7 @@ class BaseTest(unittest.TestCase):
         self.add_new_product()
         access_token=self.get_user_token()
         response = self.client().get(
-            '/api/v2/products/1',
+            '/api/v1/products/1',
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token},
         )
         return response
@@ -224,7 +224,7 @@ class BaseTest(unittest.TestCase):
         self.add_new_product()
         access_token=self.get_user_token()
         response = self.client().post(
-            '/api/v2/sales',
+            '/api/v1/sales',
             data=json.dumps(self.sales),
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token},
         )
@@ -233,7 +233,7 @@ class BaseTest(unittest.TestCase):
     def make_sale_of_unexisting_product(self):
         access_token=self.get_user_token()
         response = self.client().post(
-            '/api/v2/sales',
+            '/api/v1/sales',
             data=json.dumps(self.sales),
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token},
         )
@@ -244,7 +244,7 @@ class BaseTest(unittest.TestCase):
         self.add_new_sale_record()
         access_token=self.get_user_token()
         response = self.client().post(
-            '/api/v2/sales',
+            '/api/v1/sales',
             data=json.dumps(self.sales),
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token},
         )
@@ -254,7 +254,7 @@ class BaseTest(unittest.TestCase):
         self.add_new_product()
         access_token=self.get_user_token()
         response = self.client().post(
-            '/api/v2/sales',
+            '/api/v1/sales',
             data=json.dumps(self.exeed_sales),
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token},
         )
@@ -264,7 +264,7 @@ class BaseTest(unittest.TestCase):
         self.add_new_sale_record()
         access_token=self.get_user_token()
         response = self.client().get(
-            '/api/v2/sales',
+            '/api/v1/sales',
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token},
         )
         return response
@@ -273,7 +273,7 @@ class BaseTest(unittest.TestCase):
         self.add_new_sale_record()
         access_token=self.get_admin_token()
         resp = self.client().get(
-            '/api/v2/sales/1',
+            '/api/v1/sales/1',
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token},
         )
         return resp
@@ -281,14 +281,14 @@ class BaseTest(unittest.TestCase):
     def items_outof_range_record(self):
         access_token=self.get_admin_token()
         resp = self.client().get(
-            '/api/v2/sales/2',
+            '/api/v1/sales/2',
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token},
         )
         return resp
 
     def invalid_post_product_url(self):
         response = self.client().post(
-            '/api/v2/productss/',
+            '/api/v1/productss/',
             data=json.dumps(self.products),
             headers={'content_type': 'application/json'}
         )
@@ -296,7 +296,7 @@ class BaseTest(unittest.TestCase):
 
     def invalid_get_product_url(self):
         response = self.client().get(
-            '/api/v2//productss/',
+            '/api/v1//productss/',
             data=json.dumps(self.products),
             headers={'content_type': 'application/json'}
         )
@@ -305,7 +305,7 @@ class BaseTest(unittest.TestCase):
     def user_signup(self):
         access_token=self.get_admin_token()
         response = self.client().post(
-            '/api/v2/auth/register',
+            '/api/v1/auth/register',
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token},
             data=json.dumps(self.user)
         
@@ -316,7 +316,7 @@ class BaseTest(unittest.TestCase):
         self.user_signup()
         access_token=self.get_admin_token()
         response = self.client().post(
-            '/api/v2/auth/register',
+            '/api/v1/auth/register',
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token},
             data=json.dumps({
             "user_id": 1,
@@ -330,7 +330,7 @@ class BaseTest(unittest.TestCase):
     def check_invalid_email(self):
         access_token=self.get_admin_token()
         response = self.client().post(
-            '/api/v2/auth/register',
+            '/api/v1/auth/register',
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token},
             data=json.dumps(self.user_invalid_email))
         return response
@@ -338,7 +338,7 @@ class BaseTest(unittest.TestCase):
     def check_invalid_password(self):
         access_token=self.get_admin_token()
         response = self.client().post(
-            '/api/v2/auth/register',
+            '/api/v1/auth/register',
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token},
             data=json.dumps(self.user_invalid_password))
         return response
@@ -346,7 +346,7 @@ class BaseTest(unittest.TestCase):
     def check_login(self):
         access_token=self.get_admin_token()
         response = self.client().post(
-            '/api/v2/auth/login',
+            '/api/v1/auth/login',
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token},
             data=json.dumps(self.user1))
         return response
@@ -354,7 +354,7 @@ class BaseTest(unittest.TestCase):
     def login_with_invalid_password(self):
         access_token=self.get_admin_token()
         response = self.client().post(
-            '/api/v2/auth/login',
+            '/api/v1/auth/login',
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token},
             data=json.dumps(self.invalid_password)
         
@@ -364,7 +364,7 @@ class BaseTest(unittest.TestCase):
     def login_with_invalid_email(self):
         access_token=self.get_admin_token()
         response = self.client().post(
-            '/api/v2/auth/login',
+            '/api/v1/auth/login',
             headers={"content_type":'application/json',"Authorization": "Bearer "  + access_token},
             data=json.dumps(self.invalid_email)
         

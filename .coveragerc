@@ -1,5 +1,5 @@
 [run]
-include = */apps/*
+include = */api/*
 omit =
     *migrations*
     *__init__*
